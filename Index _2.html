@@ -6,12 +6,11 @@
     <title>GitHub Style Video & Image Showcase</title>
     <style>
         /* Reset and layout */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
         }
-
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
             background-color: #0d1117;
@@ -51,12 +50,10 @@
             align-items: center;
             gap: 50px;
         }
-
         header {
             text-align: center;
             padding: 40px 0;
         }
-
         header h1 {
             font-size: 2.5rem;
             color: #58a6ff;
@@ -73,7 +70,6 @@
             backdrop-filter: blur(8px); /* Optional: blurs the video behind the card */
             box-shadow: 0 8px 24px rgba(0,0,0,0.5);
         }
-
         .image-card img {
             width: 100%;
             height: auto;
@@ -81,7 +77,6 @@
             border-radius: 6px;
             border: 1px solid #21262d;
         }
-
         .image-card p {
             margin-top: 12px;
             font-size: 0.9rem;
@@ -91,11 +86,12 @@
 </head>
 <body>
 
-    <!-- VIDEO BACKGROUND (Autoplay, Loop, and Muted are mandatory for browser playback) -->
+    <!-- VIDEO BACKGROUND -->
     <div class="video-bg-container">
-        <!-- Swap out the src with your mp4 file path -->
+        <!-- Autoplay, Loop, and Muted are mandatory for browser background playback -->
         <video autoplay loop muted playsinline>
-            <source src="https://mixkit.co" type="video/mp4">
+            <!-- ⚠️ Replace the URL below with your actual GitHub username, repo name, and video file name -->
+            <source src="https://github.com" type="video/mp4">
             Your browser does not support the video tag.
         </video>
     </div>
