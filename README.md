@@ -3,7 +3,7 @@
 
 ---
 
-<!-- FULL VIEWPORT CONTAINER LAYOUT BRIDGE -->
+<!-- FLUID SYSTEM INTERFACE BOX CONTAINER wrapper -->
 <div style="width: 100%; max-width: 100%; background-color: #0b0c10; border: 2px solid #1f2833; border-radius: 8px; font-family: 'Courier New', monospace; box-shadow: 0 0 25px rgba(102, 252, 241, 0.2); overflow: hidden; margin: 20px 0; box-sizing: border-box;">
 
   <!-- PROFILE DATA HEADER LAYER WITH LIVE PULSING NEON LIGHTS -->
@@ -12,7 +12,7 @@
       <h2 style="color: #66fcf1; font-size: 1.2rem; letter-spacing: 2px; margin: 0 0 4px 0; font-family: 'Courier New', monospace; font-weight: bold; background: none; border: none; padding: 0;">🧠 NEURAL_LINK MODULE // ACTIVE</h2>
       <p style="font-size: 0.75rem; color: #8b949e; margin: 0; padding: 0; background: none;">QUANTUM COUPLING STATUS: ENTANGLEMENT_STABLE</p>
     </div>
-    <!-- DEEP LINK TO LIVE WEBSITE INTERFACE -->
+    <!-- DEEP LINK TO YOUR LIVE TOTAL MEDIA FUSION SITE -->
     <div style="display: flex; gap: 12px; align-items: center;">
       <a href="https://github.io" target="_blank" style="color: #66fcf1; background: rgba(102, 252, 241, 0.1); border: 1px solid #66fcf1; padding: 4px 10px; border-radius: 4px; font-size: 0.7rem; text-decoration: none; font-weight: bold; box-shadow: 0 0 8px rgba(102, 252, 241, 0.3); font-family: 'Courier New', monospace;">⚡ INITIALIZE LIVE HUB</a>
       <div class="pulse-glow-green" style="width: 12px; height: 12px; background-color: #39ff14; border-radius: 50%; box-shadow: 0 0 8px #39ff14;"></div>
@@ -68,26 +68,26 @@
       <p style="font-size: 0.75rem; color: #c9d1d9; margin-top: 4px; padding: 0; background: none;">Background image asset file cached inside `download (10).png`. Manages algorithmic decryption routines across District 9 backplanes.</p>
     </div>
 
-    <!-- DEPLOYMENT CONSOLE INSTRUCTIONS -->
+    <!-- DEPLOYMENT CONSOLE INSTRUCTIONS (FIXED CODE ALIGNMENT LIST) -->
     <h3 style="color: #66fcf1; font-size: 1rem; margin: 25px 0 12px 0; letter-spacing: 2px; border-bottom: 1px dashed #1f2833; padding-bottom: 5px; font-weight: bold; font-family: 'Courier New', monospace;">💻 TERMINAL_BOOT // INITIALIZATION COMMANDS</h3>
     <p style="font-size: 0.8rem; color: #c9d1d9; margin-bottom: 10px; padding: 0; background: none;">Execute the sequential commands below within your system shell to instantiate the network array:</p>
     
-    <div style="background: #000; border: 1px solid #1f2833; border-radius: 4px; padding: 12px; color: #39ff14; font-size: 0.75rem; overflow-x: auto; font-family: monospace; white-space: pre; line-height: 1.4;">
-<span style="color: #8b949e;"># Step 1: Sync with remote Neon Core registry node</span>
+    <div style="background: #000; border: 1px solid #1f2833; border-radius: 4px; padding: 12px; color: #39ff14; font-size: 0.75rem; overflow-x: auto; font-family: monospace; white-space: pre; line-height: 1.5;">
+# Step 1: Sync with remote Neon Core registry node
 git clone https://github.com
 
-<span style="color: #8b949e;"># Step 2: Navigate inside terminal data root directory</span>
+# Step 2: Navigate inside terminal data root directory
 cd Cyber-punk-girls-
 
-<span style="color: #8b949e;"># Step 3: Instantiate full page media array mapping</span>
-open Index_2.html</div>
+# Step 3: Instantiate full page media array mapping
+open index.html</div>
 
     <!-- FRAMEWORK ENGINE UTILITIES -->
     <div style="background: rgba(11, 12, 16, 0.9); border-left: 4px solid #66fcf1; padding: 15px; margin-top: 25px; border-radius: 0 6px 6px 0; box-sizing: border-box;">
       <h3 style="color: #66fcf1; font-size: 0.95rem; margin: 0 0 8px 0; letter-spacing: 1px; font-weight: bold; font-family: 'Courier New', monospace;">🚀 INTERFACE HARDWARE ADVANTAGES</h3>
-      <p style="font-size: 0.8 style; color: #c9d1d9; margin: 4px 0; padding: 0; background: none;">• <strong>Quantum Entanglement</strong>: Native GPU memory allocation avoids image stuttering blocks.</p>
-      <p style="font-size: 0.8 style; color: #c9d1d9; margin: 4px 0; padding: 0; background: none;">• <strong>Dynamic Rescaling</strong>: Auto-fits database records seamlessly onto mobile browser canvases.</p>
-      <p style="font-size: 0.8 style; color: #c9d1d9; margin: 4px 0; padding: 0; background: none;">• <strong>Persistence Engine</strong>: Retains data loop matrix connection states even during system power drops.</p>
+      <p style="font-size: 0.8rem; color: #c9d1d9; margin: 4px 0; padding: 0; background: none;">• <strong>Quantum Entanglement</strong>: Native GPU memory allocation avoids image stuttering blocks.</p>
+      <p style="font-size: 0.8rem; color: #c9d1d9; margin: 4px 0; padding: 0; background: none;">• <strong>Dynamic Rescaling</strong>: Auto-fits database records seamlessly onto mobile browser canvases.</p>
+      <p style="font-size: 0.8rem; color: #c9d1d9; margin: 4px 0; padding: 0; background: none;">• <strong>Persistence Engine</strong>: Retains data loop matrix connection states even during system power drops.</p>
     </div>
 
     <div style="margin-top: 25px; text-align: right;">
