@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Style Video & Image Showcase</title>
+    <style>
+        /* Reset and layout */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background-color: #0d1117;
+            color: #c9d1d9;
+            overflow-x: hidden;
+        }
+
+        /* 1. Video Background Container */
+        .video-bg-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1; /* Placed behind everything */
+            overflow: hidden;
+        }
+
+        /* Forces video to fill screen natively without distortion */
+        .video-bg-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.4; /* Dimmed down so text and images are readable */
+        }
+
+        /* 2. Scrollable Foreground Content */
+        .content-layer {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 50px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            color: #58a6ff;
+            margin-bottom: 10px;
+        }
+
+        /* Image scroll feed */
+        .image-card {
+            width: 100%;
+            background: rgba(22, 27, 34, 0.8); /* Translucent GitHub dark style */
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 16px;
+            backdrop-filter: blur(8px); /* Optional: blurs the video behind the card */
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+        }
+
+        .image-card img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 6px;
+            border: 1px solid #21262d;
+        }
+
+        .image-card p {
+            margin-top: 12px;
+            font-size: 0.9rem;
+            color: #8b949e;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- VIDEO BACKGROUND (Autoplay, Loop, and Muted are mandatory for browser playback) -->
+    <div class="video-bg-container">
+        <!-- Swap out the src with your mp4 file path -->
+        <video autoplay loop muted playsinline>
+            <source src="https://mixkit.co" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+
+    <!-- SCROLLABLE IMAGES OVERLAY -->
+    <div class="content-layer">
+        <header>
+            <h1>Project Showcase</h1>
+            <p>The video loops seamlessly in the background while you scroll through items.</p>
+        </header>
+
+        <!-- Image 1 -->
+        <div class="image-card">
+            <img src="https://picsum.photos" alt="Showcase 1">
+            <p>📁 UI Design Mockup - Captured frame view</p>
+        </div>
+
+        <!-- Image 2 -->
+        <div class="image-card">
+            <img src="https://picsum.photos" alt="Showcase 2">
+            <p>⚡ Data pipeline analytics metrics graph</p>
+        </div>
+
+        <!-- Image 3 -->
+        <div class="image-card">
+            <img src="https://picsum.photos" alt="Showcase 3">
+            <p>🎨 Dark mode visual components render</p>
+        </div>
+    </div>
+
+</body>
+</html>
