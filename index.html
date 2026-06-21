@@ -18,14 +18,20 @@
       background: #0b0c10;
       font-family: 'Courier New', monospace;
     }
-    /* Layer 1: Background Canvas Loop Engine */
-    #loopCanvas {
+    /* Layer 1: Fixed Background Video Engine */
+    .video-bg-container {
       position: absolute;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
       z-index: 1;
+      overflow: hidden;
+    }
+    .video-bg-container video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* Proportional full screen scaling */
     }
     /* Layer 2: Transparent BCI Foreground Interface */
     #ui-container {
@@ -58,8 +64,15 @@
 </head>
 <body>
 
-  <!-- Background Processing Layer -->
-  <canvas id="loopCanvas"></canvas>
+  <!-- Background Video Processing Layer -->
+  <div class="video-bg-container">
+    <!-- Autoplay, loop, muted, and playsinline are required for background execution -->
+    <video id="bgVideo" autoplay loop muted playsinline>
+      <!-- ⚠️ REPLACE 'YourUsername' AND 'YourRepo' WITH YOUR ACTUAL GITHUB DETAILS -->
+      <source src="https://github.com" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </div>
 
   <!-- Interactive Interface Layer -->
   <div id="ui-container">
@@ -69,135 +82,31 @@
 
 <script>
   /**
-   * @title HIGH-PERFORMANCE SEQUENTIAL IMAGE LOOP ENGINE
-   * Engineered for background persistence on low-tier web runtimes and mobile systems.
+   * @title NATIVE MP4 VIDEO STREAMING LOOP ENGINE
+   * Refactored from canvas frames to native video hardware acceleration.
    */
-
-  const canvas = document.getElementById("loopCanvas");
-  const ctx = canvas.getContext("2d");
+  const video = document.getElementById("bgVideo");
   const statusBox = document.getElementById("status-box");
 
-  // 1. CONFIGURATION ARRAY: Replace these strings with your actual image paths or GitHub URLs
-  const imageSources = [
-    "frame1.jpg",
-    "frame2.jpg",
-    "frame3.jpg",
-    "frame4.jpg"
-  ];
-
-  const images = [];
-  let currentFrameIndex = 0;
-  let isPlaying = true;
-  let lastFrameTime = 0;
-  
-  // Set target loop performance (e.g., 100ms per frame update = 10 FPS)
-  const frameInterval = 100; 
-
-  // 2. STAGE RESPONSIVENESS HASH
-  function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    renderCurrentFrame(); // Immediate re-draw step to avoid flashing
-  }
-  window.addEventListener("resize", resizeCanvas);
-
-  // 3. ASYNCHRONOUS PRE-LOADER
-  function preloadImages() {
-    let loadedCount = 0;
-    statusBox.innerText = `STATUS: LOADING IMAGES (0/${imageSources.length})`;
-
-    imageSources.forEach((src, idx) => {
-      const img = new Image();
-      img.src = src;
-      img.onload = () => {
-        loadedCount++;
-        images[idx] = img;
-        
-        if (loadedCount === imageSources.length) {
-          resizeCanvas();
-          statusBox.innerText = "STATUS: LOOPING ACTIVE (TAP TO PAUSE)";
-          requestAnimationFrame(loopEngine);
-        }
-      };
-      img.onerror = () => {
-        console.error(`Failed to load asset at path: ${src}`);
-      };
-    });
-  }
-
-  // 4. RENDERING & COALESCING PIPELINE
-  function renderCurrentFrame() {
-    if (!images[currentFrameIndex]) return;
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    const img = images[currentFrameIndex];
-    
-    // Scale optimization: Covers screen proportionally without distorting proportions
-    const canvasRatio = canvas.width / canvas.height;
-    const imgRatio = img.width / img.height;
-    
-    let drawWidth, drawHeight, offsetX, offsetY;
-
-    if (canvasRatio > imgRatio) {
-      drawWidth = canvas.width;
-      drawHeight = canvas.width / imgRatio;
-      offsetX = 0;
-      offsetY = (canvas.height - drawHeight) / 2;
-    } else {
-      drawWidth = canvas.height * imgRatio;
-      drawHeight = canvas.height;
-      offsetX = (canvas.width - drawWidth) / 2;
-      offsetY = 0;
-    }
-
-    ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
-  }
-
-  // 5. MAIN CORE TICK TIME ENGINE
-  function loopEngine(timestamp) {
-    if (!isPlaying) return;
-
-    if (!lastFrameTime) lastFrameTime = timestamp;
-    const elapsed = timestamp - lastFrameTime;
-
-    if (elapsed >= frameInterval) {
-      currentFrameIndex = (currentFrameIndex + 1) % images.length;
-      renderCurrentFrame();
-      lastFrameTime = timestamp;
-    }
-
-    requestAnimationFrame(loopEngine);
-  }
-
-  // 6. INTERFACE EVENT COMMANDS
+  // INTERFACE EVENT COMMANDS
   function togglePlayback() {
-    isPlaying = !isPlaying;
-    if (isPlaying) {
-      statusBox.style.background = "royalblue";
-      statusBox.innerText = "STATUS: LOOPING ACTIVE (TAP TO PAUSE)";
-      lastFrameTime = 0; // Reset tick delta tracking
-      requestAnimationFrame(loopEngine);
-    } else {
+    if (!video.paused) {
+      video.pause();
       statusBox.style.background = "#ff4d6d";
       statusBox.innerText = "STATUS: ENGINE PAUSED (TAP TO RESUME)";
+    } else {
+      video.play().catch(err => console.log("Playback interrupted:", err));
+      statusBox.style.background = "royalblue";
+      statusBox.innerText = "STATUS: LOOPING ACTIVE (TAP TO PAUSE)";
     }
   }
 
-  // 7. BACKGROUND WAKE/RECOVERY ANCHOR
-  // Prevents your mini projector or background processing tabs from locking the engine loop
+  // BACKGROUND WAKE/RECOVERY ANCHOR
   document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState === "visible") {
-      if (isPlaying) {
-        lastFrameTime = 0; 
-        requestAnimationFrame(loopEngine);
-      }
+    if (document.visibilityState === "visible" && statusBox.innerText.includes("ACTIVE")) {
+      video.play().catch(err => console.log("Recovery playback failed:", err));
     }
   });
-
-  // EXECUTE ON BOOT
-  preloadImages();
-
 </script>
 </body>
 </html>
