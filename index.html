@@ -3,6 +3,316 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BCI · NEURAL FUSION COMPILATION ENGINE</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+    body, html {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #0b0c10;
+      font-family: 'Courier New', monospace;
+    }
+
+    /* BACKGROUND CONTROLLERS */
+    .media-viewport {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    /* 1. Video Layer Styling */
+    #bgVideo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+      display: none;
+    }
+
+    /* 2. Image Layer Styling */
+    .slide-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      opacity: 0;
+      transition: opacity 1.5s ease-in-out;
+    }
+
+    /* Global Visibility Triggers */
+    .media-viewport video.active,
+    .slide-layer.active {
+      opacity: 0.50; /* Perfect dimming multiplier for cyberpunk hud overlays */
+      display: block;
+    }
+
+    /* FOREGROUND INTERFACE OVERLAYS */
+    #ui-container {
+      position: absolute;
+      top: 20px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      pointer-events: none;
+      z-index: 10;
+    }
+    h1 {
+      color: #66fcf1;
+      font-size: 1.1rem;
+      letter-spacing: 2px;
+      text-shadow: 0 0 8px rgba(102,252,241,0.6);
+      margin-bottom: 12px;
+    }
+    .hud-btn {
+      display: inline-block;
+      padding: 6px 14px;
+      background: royalblue;
+      color: white;
+      font-size: 0.75rem;
+      border-radius: 4px;
+      pointer-events: auto;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(65, 105, 225, 0.5);
+      margin: 4px;
+      font-weight: bold;
+    }
+    
+    .hud-overlay {
+      position: absolute;
+      z-index: 5;
+      color: #66fcf1;
+      font-size: 0.75rem;
+      text-shadow: 0 0 5px rgba(102,252,241,0.5);
+      background: rgba(11, 12, 16, 0.75);
+      padding: 10px;
+      border: 1px solid #1f2833;
+      border-radius: 4px;
+      pointer-events: none;
+    }
+    #hud-left { bottom: 20px; left: 20px; text-align: left; }
+    #hud-right { bottom: 20px; right: 20px; text-align: right; }
+    .glow-text { color: #ff4d6d; text-shadow: 0 0 5px #ff4d6d; }
+  </style>
+</head>
+<body>
+
+  <!-- Combined Media Viewport Framework -->
+  <div class="media-viewport" id="mediaViewport">
+    <!-- Native Video Stream Anchor -->
+    <video id="bgVideo" muted playsinline>
+      <source id="videoSource" src="animate-it (1).mp4" type="video/mp4">
+    </video>
+    <!-- Image layers get automatically compiled here via the JS database loader below -->
+  </div>
+
+  <!-- HUD Terminal Dashboards -->
+  <div class="hud-overlay" id="hud-left">
+    <div>SYS.LOC // NEON_CORE_DISTRICT_9</div>
+    <div id="engine-mode-display">CORE_MODE // VIDEO STREAM MATRIX</div>
+    <div id="asset-id-display">FEED_ID // animate-it (1).mp4</div>
+  </div>
+
+  <div class="hud-overlay" id="hud-right">
+    <div>NEURAL_LINK // <span class="glow-text">SYNCHRONIZED</span></div>
+    <div id="timestamp-ui">UTC: --:--:--</div>
+    <div>BUFFER_LOAD // 100%</div>
+  </div>
+
+  <!-- Interactive Control Modules -->
+  <div id="ui-container">
+    <h1>🧠 BCI · TOTAL QUANTUM COMPILATION CORE</h1>
+    <div class="hud-btn" id="play-btn" onclick="togglePlayback()">STATUS: RUNNING</div>
+    <div class="hud-btn" style="background: #1f2833; border: 1px solid #66fcf1;" onclick="cycleNextAsset()">👉 NEXT ASSET</div>
+    <div class="hud-btn" style="background: #000; border: 1px solid #ff4d6d; color: #ff4d6d; box-shadow: 0 0 8px rgba(255,77,109,0.3);" onclick="switchEngineMode()">🔄 SWAP ENGINE MODE</div>
+  </div>
+
+<script>
+  // Comprehensive directory playlist of your uploaded repository media assets
+  const videoPlaylist = [
+    "animate-it (1).mp4",
+    "1781986524680.mp4"
+  ];
+
+  const imagePlaylist = [
+    "download.png", "download (1).png", "download (2).png", "download (3).png", "download (4).png",
+    "download (5).png", "download (6).png", "download (7).png", "download (8).png", "download (9).png",
+    "download (10).png", "download (11).png", "download (12).png", "download (13).png", "download (14).png",
+    "download (15).png", "download (16).png", "download (17).png", "download (18).png", "download (19).png",
+    "download (20).png", "download (21).png", "download (23).png", "download (24).png", "download (25).png",
+    "download (27).png", "download (28).png", "download (29).png", "download (30).png"
+  ];
+
+  // Core configuration counters
+  let engineMode = "video"; // "video" matrix sequence vs "image" slideshow loops
+  let activeVideoIndex = 0;
+  let activeImageIndex = 0;
+  let isSystemRunning = true;
+  let imageLoopInterval;
+  const imageDisplayDuration = 4000; // 4 seconds allocation per image layer slide
+
+  // Elements
+  const viewport = document.getElementById("mediaViewport");
+  const video = document.getElementById("bgVideo");
+  const videoSource = document.getElementById("videoSource");
+  const modeDisplay = document.getElementById("engine-mode-display");
+  const assetDisplay = document.getElementById("asset-id-display");
+  const playBtn = document.getElementById("play-btn");
+  const timestampUi = document.getElementById("timestamp-ui");
+
+  // Compile individual image background block selectors automatically
+  function initializeImageLayers() {
+    imagePlaylist.forEach((file, index) => {
+      const layer = document.createElement("div");
+      layer.className = "slide-layer";
+      layer.id = `img-layer-${index}`;
+      layer.style.backgroundImage = `url('${encodeURIComponent(file)}')`;
+      viewport.appendChild(layer);
+    });
+  }
+
+  // Toggles the entire environment between Video Matrix rendering and Image loops
+  function switchEngineMode() {
+    // Shutdown active states completely
+    clearInterval(imageLoopInterval);
+    video.pause();
+    video.classList.remove("active");
+    video.style.display = "none";
+    document.querySelectorAll(".slide-layer").forEach(el => el.classList.remove("active"));
+
+    // Toggle logic rules
+    if (engineMode === "video") {
+      engineMode = "image";
+      modeDisplay.innerText = "CORE_MODE // IMAGE FEED LOOP";
+      if (isSystemRunning) startImageSlideshow();
+      renderActiveImage();
+    } else {
+      engineMode = "video";
+      modeDisplay.innerText = "CORE_MODE // VIDEO STREAM MATRIX";
+      video.style.display = "block";
+      video.classList.add("active");
+      if (isSystemRunning) video.play().catch(e => console.log(e));
+      assetDisplay.innerText = `FEED_ID // ${videoPlaylist[activeVideoIndex]}`;
+    }
+  }
+
+  // IMAGE SEQUENCE PIPELINES
+  function renderActiveImage() {
+    document.querySelectorAll(".slide-layer").forEach(el => el.classList.remove("active"));
+    const currentLayer = document.getElementById(`img-layer-${activeImageIndex}`);
+    if (currentLayer) currentLayer.classList.add("active");
+    assetDisplay.innerText = `FEED_ID // ${imagePlaylist[activeImageIndex]}`;
+  }
+
+  function advanceImageSlide() {
+    activeImageIndex = (activeImageIndex + 1) % imagePlaylist.length;
+    renderActiveImage();
+  }
+
+  function startImageSlideshow() {
+    clearInterval(imageLoopInterval);
+    imageLoopInterval = setInterval(advanceImageSlide, imageDisplayDuration);
+  }
+
+  // VIDEO SEQUENCE PIPELINES
+  function advanceVideoTrack() {
+    activeVideoIndex = (activeVideoIndex + 1) % videoPlaylist.length;
+    video.pause();
+    videoSource.setAttribute("src", videoPlaylist[activeVideoIndex]);
+    video.load();
+    assetDisplay.innerText = `FEED_ID // ${videoPlaylist[activeVideoIndex]}`;
+    if (isSystemRunning) video.play().catch(e => console.log(e));
+  }
+
+  // Manual asset advancement selector button action
+  function cycleNextAsset() {
+    if (engineMode === "video") {
+      advanceVideoTrack();
+    } else {
+      advanceImageSlide();
+    }
+  }
+
+  // Handle video tracks automatically moving to next asset on ending
+  video.addEventListener('ended', () => {
+    if (engineMode === "video") advanceVideoTrack();
+  });
+
+  // RUNTIME MASTER SWITCH ACTIONS
+  function togglePlayback() {
+    isSystemRunning = !isSystemRunning;
+    if (isSystemRunning) {
+      playBtn.style.background = "royalblue";
+      playBtn.innerText = "STATUS: RUNNING";
+      playBtn.style.boxShadow = "0 0 10px rgba(65, 105, 225, 0.5)";
+      if (engineMode === "video") {
+        video.play().catch(e => console.log(e));
+      } else {
+        startImageSlideshow();
+      }
+    } else {
+      playBtn.style.background = "#ff4d6d";
+      playBtn.innerText = "STATUS: PAUSED";
+      playBtn.style.boxShadow = "0 0 10px #ff4d6d";
+      video.pause();
+      clearInterval(imageLoopInterval);
+    }
+  }
+
+  // Clock Update HUD Module
+  function runTerminalClock() {
+    const now = new Date();
+    timestampUi.innerText = `SYS_TIME // ${now.toISOString().slice(11, 19)}`;
+    requestAnimationFrame(runTerminalClock);
+  }
+
+  // ON-BOOT BOOTSTRAP INITIALIZATION
+  window.addEventListener('DOMContentLoaded', () => {
+    initializeImageLayers();
+    runTerminalClock();
+    
+    // Start defaults
+    video.style.display = "block";
+    video.classList.add("active");
+    video.play().catch(() => {
+      // Handle early mobile user interaction blockages safely
+      isSystemRunning = false;
+      playBtn.style.background = "#ff4d6d";
+      playBtn.innerText = "STATUS: INTERRUPTED (TAP TO BOOT)";
+    });
+  });
+
+  // Handle sleep mode tab shifts gracefully
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible" && isSystemRunning && engineMode === "video") {
+      video.play().catch(e => console.log(e));
+    }
+  });
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BCI · MATRIX + SEAMLESS LOOP ENGINE</title>
   <style>
     * {
