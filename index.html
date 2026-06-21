@@ -31,7 +31,8 @@
     .video-bg-container video {
       width: 100%;
       height: 100%;
-      object-fit: cover; /* Proportional full screen scaling */
+      object-fit: cover;
+      opacity: 0.5; /* Slightly lowered to make overlays pop */
     }
     /* Layer 2: Transparent BCI Foreground Interface */
     #ui-container {
@@ -59,6 +60,34 @@
       border-radius: 4px;
       pointer-events: auto;
       cursor: pointer;
+      box-shadow: 0 0 10px rgba(65, 105, 225, 0.5);
+    }
+    /* Layer 3: Cyberpunk HUD Overlays */
+    .hud-overlay {
+      position: absolute;
+      z-index: 5;
+      color: #66fcf1;
+      font-size: 0.75rem;
+      text-shadow: 0 0 5px rgba(102,252,241,0.5);
+      background: rgba(11, 12, 16, 0.7);
+      padding: 10px;
+      border: 1px solid #1f2833;
+      border-radius: 4px;
+      pointer-events: none;
+    }
+    #hud-left {
+      bottom: 20px;
+      left: 20px;
+      text-align: left;
+    }
+    #hud-right {
+      bottom: 20px;
+      right: 20px;
+      text-align: right;
+    }
+    .glow-text {
+      color: #ff4d6d;
+      text-shadow: 0 0 5px #ff4d6d;
     }
   </style>
 </head>
@@ -66,12 +95,23 @@
 
   <!-- Background Video Processing Layer -->
   <div class="video-bg-container">
-    <!-- Autoplay, loop, muted, and playsinline are required for background execution -->
     <video id="bgVideo" autoplay loop muted playsinline>
-      <!-- Perfected URL path referencing your GitHub repo file -->
       <source src="https://github.com" type="video/mp4">
       Your browser does not support the video tag.
     </video>
+  </div>
+
+  <!-- HUD Overlays -->
+  <div class="hud-overlay" id="hud-left">
+    <div>SYS.LOC // TERMINAL_NODE_ALPHA</div>
+    <div>MATRIX_CORE // ONLINE</div>
+    <div id="fps-counter">FPS: --</div>
+  </div>
+
+  <div class="hud-overlay" id="hud-right">
+    <div>SIGNAL // <span class="glow-text">SYNCED</span></div>
+    <div id="timestamp-ui">UTC: --:--:--</div>
+    <div>BUFFER_LOAD // 100%</div>
   </div>
 
   <!-- Interactive Interface Layer -->
@@ -81,12 +121,10 @@
   </div>
 
 <script>
-  /**
-   * @title NATIVE MP4 VIDEO STREAMING LOOP ENGINE
-   * Refactored from canvas frames to native video hardware acceleration.
-   */
   const video = document.getElementById("bgVideo");
   const statusBox = document.getElementById("status-box");
+  const fpsCounter = document.getElementById("fps-counter");
+  const timestampUi = document.getElementById("timestamp-ui");
 
   // INTERFACE EVENT COMMANDS
   function togglePlayback() {
@@ -94,12 +132,36 @@
       video.pause();
       statusBox.style.background = "#ff4d6d";
       statusBox.innerText = "STATUS: ENGINE PAUSED (TAP TO RESUME)";
+      statusBox.style.boxShadow = "0 0 10px #ff4d6d";
     } else {
       video.play().catch(err => console.log("Playback interrupted:", err));
       statusBox.style.background = "royalblue";
       statusBox.innerText = "STATUS: LOOPING ACTIVE (TAP TO PAUSE)";
+      statusBox.style.boxShadow = "0 0 10px rgba(65, 105, 225, 0.5)";
     }
   }
+
+  // HUD METRICS SIMULATION
+  let lastCalledTime;
+  let fps;
+  function updateHudMetrics() {
+    // Live clock
+    const now = new Date();
+    timestampUi.innerText = `SYS_TIME // ${now.toISOString().slice(11, 19)}`;
+
+    // Simple display frame loop calculations
+    if(!lastCalledTime) {
+       lastCalledTime = performance.now();
+       fps = 0;
+    } else {
+       let delta = (performance.now() - lastCalledTime)/1000;
+       lastCalledTime = performance.now();
+       fps = Math.round(1/delta);
+       fpsCounter.innerText = `SYSTEM_PERF // ${fps} FPS`;
+    }
+    requestAnimationFrame(updateHudMetrics);
+  }
+  requestAnimationFrame(updateHudMetrics);
 
   // BACKGROUND WAKE/RECOVERY ANCHOR
   document.addEventListener("visibilitychange", () => {
