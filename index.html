@@ -306,8 +306,115 @@
 
 
 
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  /* FULL SCREEN BACKGROUND */
+  * { margin: 0; padding: 0; overflow: hidden; }
+  #bgVideo {
+    position: fixed; right: 0; bottom: 0;
+    min-width: 100%; min-height: 100%;
+    object-fit: cover; z-index: -1;
+  }
+  
+  /* THE CYBERPUNK HUD OVERLAY */
+  #hud {
+    position: fixed; top: 20px; left: 20px;
+    font-family: 'Courier New', monospace;
+    color: #00ffcc;
+    background: rgba(0, 10, 20, 0.7);
+    padding: 20px;
+    border: 1px solid #00ffcc;
+    box-shadow: 0 0 20px rgba(0, 255, 204, 0.3);
+    z-index: 10;
+    text-shadow: 0 0 10px #00ffcc;
+    min-width: 250px;
+  }
+  #hud h1 { font-size: 18px; margin-bottom: 10px; letter-spacing: 4px; }
+  #hud p { margin: 4px 0; font-size: 14px; }
+  .buzzing { color: #ff00aa; }
+  .offline { color: #ff4444; }
+  .online { color: #44ff88; }
+</style>
+</head>
+<body>
 
-"""
+<!-- THE VIDEO -->
+<video autoplay muted loop id="bgVideo">
+  <source src="animate-it (1).mp4" type="video/mp4">
+</video>
+
+<!-- THE HUD OVERLAY -->
+<div id="hud">
+  <h1>⚡ BCI · GHOST HIVE ⚡</h1>
+  <p id="status" class="offline">[ STATUS: SYNCHRONIZING... ]</p>
+  <p id="dataX">X: 0.00</p>
+  <p id="dataY">Y: 0.00</p>
+  <p id="dataHz">HZ: 0.00</p>
+  <p id="dataPitch">SPEED: 1.00x</p>
+  <p id="dataCutoff">CUTOFF: 0 Hz</p>
+  <hr style="border-color:#00ffcc; margin: 8px 0;">
+  <p style="font-size:10px; opacity:0.6;">🐝 MOUSE PAD = PHYSICS BUZZING</p>
+</div>
+
+<script>
+  // THE WORKER DRONE - Connects to the Hive (Queen Bee)
+  const video = document.getElementById('bgVideo');
+  const statusEl = document.getElementById('status');
+  
+  // CONNECT TO THE HIVE (Change this IP to your Phone's IPv4: 192.168.4.54)
+  const HOST = '192.168.4.54'; // <<< CHANGE THIS TO YOUR PHONE'S IP!
+  const PORT = 8081;
+  
+  let ws;
+  function connectToHive() {
+    ws = new WebSocket(`ws://${HOST}:${PORT}`);
+    
+    ws.onopen = function() {
+      statusEl.innerHTML = '[ STATUS: 🔗 HIVE CONNECTED ]';
+      statusEl.className = 'online';
+    };
+    
+    ws.onmessage = function(event) {
+      const data = JSON.parse(event.data);
+      
+      // --- APPLY THE PHYSICS BUZZING TO THE VIDEO ---
+      // 1. PITCH (Speed): Directly maps to playback rate
+      video.playbackRate = data.pitch;
+      
+      // 2. TREMOR (Visual Buzz): Adds a CSS shake effect
+      const shake = data.tremor * 0.5;
+      document.body.style.transform = `translate(${shake}px, ${shake/2}px)`;
+      
+      // 3. CUTOFF (Visual Filter): Changes the video color hue/brightness
+      const hue = (data.cutoff / 5000) * 360;
+      video.style.filter = `hue-rotate(${hue}deg) brightness(${1 + (data.tremor/20)})`;
+      
+      // --- UPDATE THE HUD DISPLAY ---
+      document.getElementById('dataX').innerHTML = `X: ${data.x.toFixed(2)}`;
+      document.getElementById('dataY').innerHTML = `Y: ${data.y.toFixed(2)}`;
+      document.getElementById('dataHz').innerHTML = `HZ: ${data.tremor.toFixed(2)}`;
+      document.getElementById('dataPitch').innerHTML = `SPEED: ${data.pitch.toFixed(2)}x`;
+      document.getElementById('dataCutoff').innerHTML = `CUTOFF: ${data.cutoff} Hz`;
+    };
+    
+    ws.onclose = function() {
+      statusEl.innerHTML = '[ STATUS: ⚠️ HIVE OFFLINE ]';
+      statusEl.className = 'offline';
+      setTimeout(connectToHive, 2000);
+    };
+    
+    ws.onerror = function() {
+      ws.close();
+    };
+  }
+  
+  connectToHive();
+</script>
+</body>
+</html>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -483,4 +590,4 @@
 </script>
 </body>
 </html>
-"""
+
