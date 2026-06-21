@@ -1,126 +1,216 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GitHub Style Video & Image Showcase</title>
-    <style>
-        /* Reset and layout */
-        * { 
-            box-sizing: border-box; 
-            margin: 0; 
-            padding: 0; 
-        }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-            background-color: #0d1117;
-            color: #c9d1d9;
-            overflow-x: hidden;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BCI · MATRIX + SEAMLESS LOOP ENGINE</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+    body, html {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #0b0c10;
+      font-family: 'Courier New', monospace;
+    }
 
-        /* 1. Video Background Container */
-        .video-bg-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -1; /* Placed behind everything */
-            overflow: hidden;
-        }
+    /* Layer 1: Fullscreen Responsive Background Slideshow Component */
+    .slideshow-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 1;
+      overflow: hidden;
+    }
+    .slide-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      opacity: 0;
+      transition: opacity 1.5s ease-in-out; /* Smooth transition fade speed */
+    }
+    .slide-layer.active {
+      opacity: 0.55; /* Dimmed down to ensure terminal HUD overlays pop cleanly */
+    }
 
-        /* Forces video to fill screen natively without distortion */
-        .video-bg-container video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.4; /* Dimmed down so text and images are readable */
-        }
+    /* Layer 2: Transparent BCI Foreground Interface */
+    #ui-container {
+      position: absolute;
+      top: 20px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      pointer-events: none;
+      z-index: 10;
+    }
+    h1 {
+      color: #66fcf1;
+      font-size: 1.2rem;
+      letter-spacing: 2px;
+      text-shadow: 0 0 8px rgba(102,252,241,0.6);
+      margin-bottom: 8px;
+    }
+    #status-box {
+      display: inline-block;
+      padding: 6px 12px;
+      background: royalblue;
+      color: white;
+      font-size: 0.8rem;
+      border-radius: 4px;
+      pointer-events: auto;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(65, 105, 225, 0.5);
+    }
 
-        /* 2. Scrollable Foreground Content */
-        .content-layer {
-            position: relative;
-            z-index: 1;
-            width: 100%;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 40px 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 50px;
-        }
-        header {
-            text-align: center;
-            padding: 40px 0;
-        }
-        header h1 {
-            font-size: 2.5rem;
-            color: #58a6ff;
-            margin-bottom: 10px;
-        }
-
-        /* Image scroll feed */
-        .image-card {
-            width: 100%;
-            background: rgba(22, 27, 34, 0.8); /* Translucent GitHub dark style */
-            border: 1px solid #30363d;
-            border-radius: 6px;
-            padding: 16px;
-            backdrop-filter: blur(8px); /* Optional: blurs the video behind the card */
-            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-        }
-        .image-card img {
-            width: 100%;
-            height: auto;
-            display: block;
-            border-radius: 6px;
-            border: 1px solid #21262d;
-        }
-        .image-card p {
-            margin-top: 12px;
-            font-size: 0.9rem;
-            color: #8b949e;
-        }
-    </style>
+    /* Layer 3: Cyberpunk HUD Overlays */
+    .hud-overlay {
+      position: absolute;
+      z-index: 5;
+      color: #66fcf1;
+      font-size: 0.75rem;
+      text-shadow: 0 0 5px rgba(102,252,241,0.5);
+      background: rgba(11, 12, 16, 0.7);
+      padding: 10px;
+      border: 1px solid #1f2833;
+      border-radius: 4px;
+      pointer-events: none;
+    }
+    #hud-left {
+      bottom: 20px;
+      left: 20px;
+      text-align: left;
+    }
+    #hud-right {
+      bottom: 20px;
+      right: 20px;
+      text-align: right;
+    }
+    .glow-text {
+      color: #ff4d6d;
+      text-shadow: 0 0 5px #ff4d6d;
+    }
+  </style>
 </head>
 <body>
 
-    <!-- VIDEO BACKGROUND -->
-    <div class="video-bg-container">
-        <!-- Autoplay, Loop, and Muted are mandatory for browser background playback -->
-        <video autoplay loop muted playsinline>
-            <!-- ⚠️ Replace the URL below with your actual GitHub username, repo name, and video file name -->
-            <source src="https://github.com" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-    </div>
+  <!-- Dynamic Image Slideshow Layer -->
+  <div class="slideshow-container" id="slideshow">
+    <!-- Image layers will be injected dynamically via the script engine below -->
+  </div>
 
-    <!-- SCROLLABLE IMAGES OVERLAY -->
-    <div class="content-layer">
-        <header>
-            <h1>Project Showcase</h1>
-            <p>The video loops seamlessly in the background while you scroll through items.</p>
-        </header>
+  <!-- HUD Overlays -->
+  <div class="hud-overlay" id="hud-left">
+    <div>SYS.LOC // TERMINAL_NODE_ALPHA</div>
+    <div>MATRIX_CORE // ONLINE</div>
+    <div id="image-index">FRAME_ID // 01</div>
+  </div>
 
-        <!-- Image 1 -->
-        <div class="image-card">
-            <img src="https://picsum.photos" alt="Showcase 1">
-            <p>📁 UI Design Mockup - Captured frame view</p>
-        </div>
+  <div class="hud-overlay" id="hud-right">
+    <div>SIGNAL // <span class="glow-text">SYNCED</span></div>
+    <div id="timestamp-ui">UTC: --:--:--</div>
+    <div>BUFFER_LOAD // 100%</div>
+  </div>
 
-        <!-- Image 2 -->
-        <div class="image-card">
-            <img src="https://picsum.photos" alt="Showcase 2">
-            <p>⚡ Data pipeline analytics metrics graph</p>
-        </div>
+  <!-- Interactive Interface Layer -->
+  <div id="ui-container">
+    <h1>🧠 BCI · FEEDBACK MATRIX + BACKGROUND ENGINE</h1>
+    <div id="status-box" onclick="togglePlayback()">STATUS: LOOPING ACTIVE (TAP TO PAUSE)</div>
+  </div>
 
-        <!-- Image 3 -->
-        <div class="image-card">
-            <img src="https://picsum.photos" alt="Showcase 3">
-            <p>🎨 Dark mode visual components render</p>
-        </div>
-    </div>
+<script>
+  // Array linking directly to your uploaded files
+  // Ensure the spaces and parentheses match your exact file name structures
+  const imageFiles = [
+    "download (1).png",
+    "download (10).png",
+    "download (11).png",
+    "download (12).png",
+    "download (13).png",
+    "download (14).png",
+    "download (15).png",
+    "download (16).png",
+    "download (17).png",
+    "download (18).png",
+    "download (19).png"
+  ];
 
+  const slideshow = document.getElementById("slideshow");
+  const statusBox = document.getElementById("status-box");
+  const timestampUi = document.getElementById("timestamp-ui");
+  const imageIndexUi = document.getElementById("image-index");
+
+  let currentSlideIndex = 0;
+  let isPlaying = true;
+  let slideInterval;
+  
+  // Set background display time per image (e.g., 4000ms = 4 seconds per picture)
+  const slideDuration = 4000; 
+
+  // Injects background images cleanly into DOM layers to guarantee instant caching
+  function buildSlideshowLayers() {
+    imageFiles.forEach((file, index) => {
+      const layer = document.createElement("div");
+      layer.className = "slide-layer";
+      layer.style.backgroundImage = `url('${encodeURIComponent(file)}')`;
+      if (index === 0) layer.classList.add("active");
+      slideshow.appendChild(layer);
+    });
+  }
+
+  function cycleSlideshow() {
+    if (!isPlaying) return;
+
+    const layers = document.querySelectorAll(".slide-layer");
+    layers[currentSlideIndex].classList.remove("active");
+
+    // Loop transition mapping logic
+    currentSlideIndex = (currentSlideIndex + 1) % layers.length;
+    layers[currentSlideIndex].classList.add("active");
+
+    // Display formatted index tracker in the HUD
+    imageIndexUi.innerText = `FRAME_ID // ${String(currentSlideIndex + 1).padStart(2, '0')}`;
+  }
+
+  function startEngine() {
+    slideInterval = setInterval(cycleSlideshow, slideDuration);
+  }
+
+  function togglePlayback() {
+    isPlaying = !isPlaying;
+    if (isPlaying) {
+      statusBox.style.background = "royalblue";
+      statusBox.innerText = "STATUS: LOOPING ACTIVE (TAP TO PAUSE)";
+      statusBox.style.boxShadow = "0 0 10px rgba(65, 105, 225, 0.5)";
+    } else {
+      statusBox.style.background = "#ff4d6d";
+      statusBox.innerText = "STATUS: ENGINE PAUSED (TAP TO RESUME)";
+      statusBox.style.boxShadow = "0 0 10px #ff4d6d";
+    }
+  }
+
+  // Live HUD terminal clock updater
+  function updateClock() {
+    const now = new Date();
+    timestampUi.innerText = `SYS_TIME // ${now.toISOString().slice(11, 19)}`;
+    requestAnimationFrame(updateClock);
+  }
+
+  // Initial execution blocks
+  buildSlideshowLayers();
+  startEngine();
+  requestAnimationFrame(updateClock);
+</script>
 </body>
 </html>
