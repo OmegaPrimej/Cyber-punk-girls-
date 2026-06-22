@@ -1,3 +1,24 @@
+# Navigate to your project folder
+cd Cyber-punk-girls-
+
+# Open README in nano or your preferred editor
+nano README.md
+
+# Delete everything and paste the new content
+# (Ctrl + X to exit, Y to save, Enter to confirm)
+
+# Add the changes to git
+git add README.md
+
+# Commit the changes
+git commit -m "Updated README with neural link hub"
+
+# Push to GitHub
+git push origin main
+
+
+
+
 # 🌆 Cyberpunk Girls of the Neon District
 > **Central Quantum Entanglement Node & Neural Link Interface Terminal.**
 
