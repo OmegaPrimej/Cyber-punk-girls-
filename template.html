@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEURAL LINK · BCI CORE</title>
+  
+  <!-- ============================================================
+       MASTER SKIN · CYBERPUNK NEURAL CORE
+       ============================================================ -->
+  <style>
+    /* ---- QUANTUM VOID BASE ---- */
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+    body, html {
+      width: 100%;
+      min-height: 100vh;
+      background: #0b0c10;
+      color: #66fcf1;
+      font-family: 'Courier New', monospace;
+      overflow-x: hidden;
+    }
+
+    /* ---- NEURAL LINK NAVIGATION BAR ---- */
+    #neural-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      background: rgba(11, 12, 16, 0.92);
+      border-bottom: 1px solid rgba(102, 252, 241, 0.15);
+      padding: 8px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+    }
+    #neural-nav .brand {
+      font-size: 14px;
+      letter-spacing: 3px;
+      color: #66fcf1;
+      text-shadow: 0 0 20px rgba(102, 252, 241, 0.2);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    #neural-nav .brand .brain {
+      font-size: 20px;
+      animation: brain-pulse-nav 2s infinite alternate;
+    }
+    @keyframes brain-pulse-nav {
+      0% { opacity: 0.6; transform: scale(1); }
+      100% { opacity: 1; transform: scale(1.1); text-shadow: 0 0 30px rgba(102, 252, 241, 0.3); }
+    }
+    #neural-nav .nav-links {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    #neural-nav .nav-links a {
+      color: #8899bb;
+      text-decoration: none;
+      font-size: 11px;
+      padding: 6px 14px;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      transition: 0.3s;
+      letter-spacing: 1px;
+    }
+    #neural-nav .nav-links a:hover {
+      color: #66fcf1;
+      border-color: #66fcf1;
+      box-shadow: 0 0 30px rgba(102, 252, 241, 0.05);
+    }
+    #neural-nav .nav-links a.active {
+      color: #66fcf1;
+      border-color: #66fcf1;
+      background: rgba(102, 252, 241, 0.05);
+      text-shadow: 0 0 20px rgba(102, 252, 241, 0.2);
+    }
+    #neural-nav .status-dot {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #44ff88;
+      margin-right: 6px;
+      animation: pulse-dot 1.5s infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; box-shadow: 0 0 10px #44ff88; }
+      50% { opacity: 0.3; box-shadow: 0 0 5px #44ff88; }
+    }
+
+    /* ---- NEURAL LINK CONTENT AREA ---- */
+    #neural-content {
+      margin-top: 60px;
+      padding: 20px;
+      min-height: calc(100vh - 120px);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ---- QUANTUM SNOW OVERLAY (always present) ---- */
+    #quantum-snow-master {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+      mix-blend-mode: screen;
+      opacity: 0.3;
+    }
+
+    /* ---- INFRARED PROXIMITY INDICATOR ---- */
+    #proximity-indicator {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 100;
+      font-size: 10px;
+      color: #445566;
+      text-align: right;
+      letter-spacing: 1px;
+      background: rgba(11, 12, 16, 0.85);
+      padding: 10px 14px;
+      border: 1px solid rgba(102, 252, 241, 0.05);
+      border-radius: 4px;
+      backdrop-filter: blur(8px);
+    }
+    #proximity-indicator .pulse-bar {
+      width: 80px;
+      height: 2px;
+      background: #1f2833;
+      margin-top: 4px;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    #proximity-indicator .pulse-bar .fill {
+      height: 100%;
+      width: 0%;
+      background: #66fcf1;
+      transition: width 0.05s ease;
+      box-shadow: 0 0 20px rgba(102, 252, 241, 0.3);
+    }
+
+    /* ---- RESPONSIVE ---- */
+    @media (max-width: 600px) {
+      #neural-nav { padding: 6px 12px; }
+      #neural-nav .brand { font-size: 11px; }
+      #neural-nav .nav-links a { font-size: 9px; padding: 4px 10px; }
+      #neural-content { margin-top: 70px; padding: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+       NEURAL NAVIGATION BAR
+       ============================================================ -->
+  <nav id="neural-nav">
+    <div class="brand">
+      <span class="brain">🧠</span>
+      <span>NEURAL LINK · BCI CORE</span>
+      <span style="font-size:9px; color:#445566; letter-spacing:2px;">v.2.0.1</span>
+    </div>
+    <div class="nav-links">
+      <a href="index.html" class="active">🌀 FEED</a>
+      <a href="bci-matrix.html">🧠 MATRIX</a>
+      <a href="neural-dash.html">📡 DASH</a>
+      <a href="pulse-stream.html">⚡ PULSE</a>
+    </div>
+    <div style="font-size:9px; color:#445566; display:flex; align-items:center; gap:6px;">
+      <span class="status-dot"></span>
+      <span id="nav-status">SYNC</span>
+    </div>
+  </nav>
+
+  <!-- ============================================================
+       QUANTUM SNOW (Background Mesh)
+       ============================================================ -->
+  <canvas id="quantum-snow-master"></canvas>
+
+  <!-- ============================================================
+       MAIN CONTENT (Page content goes here)
+       ============================================================ -->
+  <main id="neural-content">
+    <!-- 
+      ═══════════════════════════════════════════════════════════════
+      PAGE CONTENT GOES HERE – Each page injects its own content
+      ═══════════════════════════════════════════════════════════════
+    -->
+    <h1>🌀 NEURAL FEED · CYBERPUNK GIRLS</h1>
+    <p style="color:#8899bb; font-size:14px; margin-top:10px;">
+      The quantum cascade is active. Your BCI neural link is synced.
+    </p>
+    <!-- Your video/background content goes here -->
+  </main>
+
+  <!-- ============================================================
+       INFRARED PROXIMITY SENSOR INDICATOR
+       ============================================================ -->
+  <div id="proximity-indicator">
+    <div style="display:flex; align-items:center; gap:6px; justify-content:flex-end;">
+      <span style="color:#8899bb;">IR PROX</span>
+      <span id="prox-value" style="color:#66fcf1;">0%</span>
+    </div>
+    <div class="pulse-bar">
+      <div class="fill" id="prox-fill"></div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       MASTER JAVASCRIPT ENGINE
+       ============================================================ -->
+  <script>
+    // ====================================================================
+    // 1. QUANTUM SNOW (Master Background)
+    // ====================================================================
+    const snowCanvas = document.getElementById('quantum-snow-master');
+    const sctx = snowCanvas.getContext('2d');
+    let snowParticles = [];
+    const SNOW_COUNT = 120;
+
+    function resizeSnow() {
+      snowCanvas.width = window.innerWidth;
+      snowCanvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeSnow);
+    resizeSnow();
+
+    class SnowParticle {
+      constructor() {
+        this.reset();
+      }
+      reset() {
+        this.x = Math.random() * snowCanvas.width;
+        this.y = Math.random() * snowCanvas.height - snowCanvas.height;
+        this.size = 0.5 + Math.random() * 2.5;
+        this.speed = 0.2 + Math.random() * 1;
+        this.opacity = 0.1 + Math.random() * 0.4;
+        this.wobble = Math.random() * 100;
+      }
+      update() {
+        this.y += this.speed;
+        this.wobble += 0.02;
+        this.x += Math.sin(this.wobble) * 0.15;
+        if (this.y > snowCanvas.height) this.reset();
+      }
+      draw(ctx) {
+        const alpha = this.opacity * (0.5 + 0.5 * Math.sin(this.wobble * 0.5));
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(102, 252, 241, ${alpha * 0.5})`;
+        ctx.shadowColor = `rgba(102, 252, 241, 0.05)`;
+        ctx.shadowBlur = 10;
+        ctx.fill();
+      }
+    }
+
+    for (let i = 0; i < SNOW_COUNT; i++) {
+      const p = new SnowParticle();
+      p.y = Math.random() * snowCanvas.height;
+      snowParticles.push(p);
+    }
+
+    function drawSnow() {
+      sctx.clearRect(0, 0, snowCanvas.width, snowCanvas.height);
+      snowParticles.forEach(p => { p.update(); p.draw(sctx); });
+      requestAnimationFrame(drawSnow);
+    }
+    drawSnow();
+
+    // ====================================================================
+    // 2. INFRARED PROXIMITY SENSOR SIMULATION
+    // ====================================================================
+    let proxValue = 0;
+    let targetProx = 0;
+    const proxFill = document.getElementById('prox-fill');
+    const proxValueEl = document.getElementById('prox-value');
+
+    function updateProximity() {
+      // Simulate IR sensor data (replace with real WebUSB/Serial later)
+      // Random spikes when mouse moves or when "ghost" is present
+      const movement = Math.random() < 0.1 ? Math.random() * 40 : 0;
+      targetProx = Math.min(100, targetProx * 0.95 + movement * 0.5);
+      
+      // Smooth interpolation
+      proxValue += (targetProx - proxValue) * 0.08;
+      
+      // Update UI
+      proxFill.style.width = proxValue + '%';
+      proxValueEl.textContent = Math.round(proxValue) + '%';
+      
+      // Color shifts with proximity
+      if (proxValue > 70) {
+        proxFill.style.background = '#ff4d6d';
+        proxFill.style.boxShadow = '0 0 30px rgba(255, 77, 109, 0.3)';
+        proxValueEl.style.color = '#ff4d6d';
+      } else if (proxValue > 40) {
+        proxFill.style.background = '#ffaa00';
+        proxFill.style.boxShadow = '0 0 20px rgba(255, 170, 0, 0.2)';
+        proxValueEl.style.color = '#ffaa00';
+      } else {
+        proxFill.style.background = '#66fcf1';
+        proxFill.style.boxShadow = '0 0 20px rgba(102, 252, 241, 0.2)';
+        proxValueEl.style.color = '#66fcf1';
+      }
+      
+      requestAnimationFrame(updateProximity);
+    }
+    updateProximity();
+
+    // ====================================================================
+    // 3. NEURAL LINK STATUS (Sync pulse)
+    // ====================================================================
+    const navStatus = document.getElementById('nav-status');
+    let syncState = 0;
+
+    setInterval(() => {
+      syncState = (syncState + 1) % 4;
+      const states = ['SYNC', 'PULSE', 'GLITCH', 'SYNC'];
+      navStatus.textContent = states[syncState];
+      if (syncState === 2) {
+        navStatus.style.color = '#ff4d6d';
+        setTimeout(() => { navStatus.style.color = '#445566'; }, 300);
+      }
+    }, 2000);
+
+    // ====================================================================
+    // 4. PAGE NAVIGATION (Active link highlighting)
+    // ====================================================================
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    document.querySelectorAll('#neural-nav .nav-links a').forEach(link => {
+      if (link.getAttribute('href') === currentPage) {
+        link.classList.add('active');
+      } else {
+        link.classList.remove('active');
+      }
+    });
+
+    console.log('🧠 NEURAL LINK CORE INITIALIZED');
+    console.log('📡 INFRARED PROXIMITY SENSOR ACTIVE');
+    console.log('🌀 QUANTUM SNOW FALLING FROM THE MESH');
+    console.log('⚡ ALL PAGES WILL SYNC TO THIS SKIN');
+  </script>
+</body>
+</html>
