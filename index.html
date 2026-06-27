@@ -2,6 +2,763 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>NEURAL CORE · CYBERPUNK GIRLS · BCI MATRIX</title>
+  
+  <style>
+    /* ============================================================
+       QUANTUM VOID + NEON DISTRICT BASE
+       ============================================================ */
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+    body, html {
+      width: 100%;
+      min-height: 100vh;
+      background: #0b0c10;
+      color: #66fcf1;
+      font-family: 'Courier New', monospace;
+      overflow-x: hidden;
+    }
+
+    /* ---- NEURAL NAVIGATION BAR ---- */
+    #neural-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      background: rgba(11, 12, 16, 0.95);
+      border-bottom: 1px solid rgba(102, 252, 241, 0.1);
+      padding: 6px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 0 60px rgba(0, 0, 0, 0.9);
+    }
+    #neural-nav .brand {
+      font-size: 12px;
+      letter-spacing: 3px;
+      color: #66fcf1;
+      text-shadow: 0 0 30px rgba(102, 252, 241, 0.1);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    #neural-nav .brand .brain {
+      font-size: 18px;
+      animation: brain-pulse-nav 1.8s infinite alternate;
+    }
+    @keyframes brain-pulse-nav {
+      0% { opacity: 0.5; transform: scale(1); filter: hue-rotate(0deg); }
+      100% { opacity: 1; transform: scale(1.1); filter: hue-rotate(20deg); text-shadow: 0 0 40px rgba(102, 252, 241, 0.2); }
+    }
+    #neural-nav .nav-links {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+    #neural-nav .nav-links a {
+      color: #667799;
+      text-decoration: none;
+      font-size: 10px;
+      padding: 5px 12px;
+      border: 1px solid transparent;
+      border-radius: 3px;
+      transition: 0.3s;
+      letter-spacing: 1px;
+    }
+    #neural-nav .nav-links a:hover {
+      color: #66fcf1;
+      border-color: rgba(102, 252, 241, 0.2);
+      box-shadow: 0 0 30px rgba(102, 252, 241, 0.02);
+    }
+    #neural-nav .nav-links a.active {
+      color: #66fcf1;
+      border-color: #66fcf1;
+      background: rgba(102, 252, 241, 0.05);
+      text-shadow: 0 0 20px rgba(102, 252, 241, 0.1);
+    }
+    #neural-nav .status-dot {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #44ff88;
+      margin-right: 4px;
+      animation: pulse-dot 1.2s infinite;
+      box-shadow: 0 0 15px rgba(68, 255, 136, 0.2);
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; box-shadow: 0 0 15px #44ff88; }
+      50% { opacity: 0.2; box-shadow: 0 0 5px #44ff88; }
+    }
+
+    /* ---- VIDEO BACKGROUND ---- */
+    .video-bg-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .video-bg-container video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.5;
+    }
+
+    /* ---- QUANTUM SNOW OVERLAY ---- */
+    #quantum-snow-master {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 2;
+      pointer-events: none;
+      mix-blend-mode: screen;
+      opacity: 0.2;
+    }
+
+    /* ---- BCI HUD OVERLAY ---- */
+    #hud-primary {
+      position: fixed;
+      top: 70px;
+      left: 20px;
+      z-index: 10;
+      color: #00ffcc;
+      background: rgba(0, 10, 20, 0.7);
+      padding: 16px 20px;
+      border: 1px solid rgba(0, 255, 204, 0.15);
+      box-shadow: 0 0 40px rgba(0, 255, 204, 0.05);
+      text-shadow: 0 0 10px rgba(0, 255, 204, 0.1);
+      min-width: 240px;
+      font-family: 'Courier New', monospace;
+      pointer-events: none;
+      backdrop-filter: blur(8px);
+      border-radius: 4px;
+    }
+    #hud-primary h1 {
+      font-size: 11px;
+      letter-spacing: 3px;
+      margin-bottom: 6px;
+      color: #66fcf1;
+    }
+    #hud-primary .line {
+      margin: 2px 0;
+      font-size: 10px;
+      letter-spacing: 1px;
+      color: #8899bb;
+    }
+
+    /* ---- SECONDARY HUD ---- */
+    #hud-secondary {
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      z-index: 9;
+      color: #ff66aa;
+      background: rgba(20, 0, 10, 0.6);
+      padding: 12px 16px;
+      border: 1px solid rgba(255, 68, 136, 0.1);
+      box-shadow: 0 0 30px rgba(255, 68, 136, 0.03);
+      text-shadow: 0 0 8px rgba(255, 68, 136, 0.05);
+      min-width: 160px;
+      font-family: 'Courier New', monospace;
+      text-align: right;
+      pointer-events: none;
+      backdrop-filter: blur(8px);
+      border-radius: 4px;
+      transform: translate(4px, -4px);
+    }
+    #hud-secondary .line {
+      font-size: 9px;
+      margin: 2px 0;
+      letter-spacing: 1px;
+      color: #8899bb;
+    }
+    #hud-secondary .glow-text {
+      color: #ff4d6d;
+      text-shadow: 0 0 15px rgba(255, 77, 109, 0.1);
+    }
+
+    /* ---- CONTROLS ---- */
+    #controls {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 20;
+      display: flex;
+      gap: 8px;
+      pointer-events: auto;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    #controls button {
+      background: rgba(11, 12, 16, 0.85);
+      border: 1px solid rgba(102, 252, 241, 0.1);
+      color: #8899bb;
+      padding: 8px 16px;
+      border-radius: 3px;
+      font-family: 'Courier New', monospace;
+      font-size: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+      letter-spacing: 1px;
+      touch-action: manipulation;
+    }
+    #controls button:hover {
+      background: rgba(102, 252, 241, 0.05);
+      border-color: #66fcf1;
+      color: #66fcf1;
+      box-shadow: 0 0 30px rgba(102, 252, 241, 0.02);
+    }
+    #controls button.danger {
+      border-color: rgba(255, 77, 109, 0.2);
+      color: #ff4d6d;
+    }
+    #controls button.danger:hover {
+      border-color: #ff4d6d;
+      box-shadow: 0 0 30px rgba(255, 77, 109, 0.05);
+    }
+    #controls button.success {
+      border-color: rgba(68, 255, 136, 0.2);
+      color: #44ff88;
+    }
+    #controls button.success:hover {
+      border-color: #44ff88;
+      box-shadow: 0 0 30px rgba(68, 255, 136, 0.05);
+    }
+
+    /* ---- RESPONSIVE ---- */
+    @media (max-width: 600px) {
+      #neural-nav { padding: 4px 10px; }
+      #neural-nav .brand { font-size: 9px; }
+      #neural-nav .nav-links a { font-size: 8px; padding: 3px 8px; }
+      #hud-primary { top: 60px; left: 10px; padding: 10px 14px; min-width: 180px; }
+      #hud-primary .line { font-size: 8px; }
+      #hud-secondary { bottom: 70px; right: 10px; padding: 8px 12px; min-width: 120px; }
+      #hud-secondary .line { font-size: 8px; }
+      #controls { bottom: 10px; gap: 4px; }
+      #controls button { font-size: 8px; padding: 6px 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+       NEURAL NAVIGATION BAR
+       ============================================================ -->
+  <nav id="neural-nav">
+    <div class="brand">
+      <span class="brain">🧠</span>
+      <span>NEURAL CORE · CYBERPUNK GIRLS</span>
+      <span style="font-size:8px; color:#445566; letter-spacing:2px;">BCI v.3.0</span>
+    </div>
+    <div class="nav-links">
+      <a href="#" class="active">🌀 FEED</a>
+      <a href="#" onclick="alert('🧠 MATRIX MODULE LOADING...')">🧠 MATRIX</a>
+      <a href="#" onclick="alert('📡 DASHBOARD LOADING...')">📡 DASH</a>
+      <a href="#" onclick="alert('⚡ PULSE STREAM LOADING...')">⚡ PULSE</a>
+    </div>
+    <div style="font-size:8px; color:#445566; display:flex; align-items:center; gap:4px;">
+      <span class="status-dot"></span>
+      <span id="nav-status">SYNC</span>
+    </div>
+  </nav>
+
+  <!-- ============================================================
+       VIDEO BACKGROUND
+       ============================================================ -->
+  <div class="video-bg-container">
+    <video id="bgVideo" autoplay loop muted playsinline>
+      <source src="animate-it (1).mp4" type="video/mp4">
+    </video>
+  </div>
+
+  <!-- ============================================================
+       QUANTUM SNOW
+       ============================================================ -->
+  <canvas id="quantum-snow-master"></canvas>
+
+  <!-- ============================================================
+       BCI HUD PRIMARY
+       ============================================================ -->
+  <div id="hud-primary">
+    <h1>⚡ NEON DISTRICT · BCI CORE ⚡</h1>
+    <div class="line" id="engine-mode-display">CORE_MODE // VIDEO STREAM MATRIX</div>
+    <div class="line" id="asset-id-display">FEED_ID // animate-it (1).mp4</div>
+    <div class="line" id="quantum-clock">
+      ⏱️ <span id="clock-display">--:--:--</span>
+      <span style="color:#445566; font-size:8px;">  (δ = <span id="delta-display">0.00</span>s)</span>
+    </div>
+    <div class="line">
+      🧠 <span id="brain-status">NEURAL LINK: ACTIVE</span>
+    </div>
+    <div class="line" style="color:#667799; font-size:9px;">
+      X: <span id="x-display">0.00</span>  Y: <span id="y-display">0.00</span>  HZ: <span id="hz-display">0.00</span>
+    </div>
+    <div class="line" style="color:#667799; font-size:9px;">
+      SPEED: <span id="speed-display">1.00</span>x  |  CUTOFF: <span id="cutoff-display">0</span>Hz
+    </div>
+    <div class="line" style="color:#445566; font-size:8px; margin-top:4px; border-top:1px solid rgba(102, 252, 241, 0.05); padding-top:4px;">
+      ⚡ PULSE STREAM · FEMBOID DISTRICT
+    </div>
+  </div>
+
+  <!-- ============================================================
+       SECONDARY HUD
+       ============================================================ -->
+  <div id="hud-secondary">
+    <div class="line" style="font-size:11px; font-weight:bold; color:#ff66aa;">🧠 GHOST MATRIX (LOUD)</div>
+    <div class="line" style="font-size:8px; color:#667799;">STATUS: <span id="ghost-status" style="color:#ff66aa;">STANDBY</span></div>
+    <div class="line" style="font-size:9px; color:#ff4488;" id="ghost-coords">
+      X: <span id="ghost-x">0.00</span> | Y: <span id="ghost-y">0.00</span> | Hz: <span id="ghost-hz">0.00</span>
+    </div>
+    <div class="line" style="font-size:8px; color:#445566; margin-top:2px;">
+      <span id="bridge-status" style="color:#44ff88;">◉ BRIDGE: ONLINE</span>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       CONTROLS
+       ============================================================ -->
+  <div id="controls">
+    <button id="playBtn" class="success">⏸ PAUSE</button>
+    <button id="glitchToggleBtn" class="danger">🌀 GLITCH: ON</button>
+    <button id="hiveToggleBtn">🐝 HIVE: OFF</button>
+    <button id="resetBtn">⟳ RESET</button>
+    <button id="nextBtn">⏭ NEXT</button>
+    <button id="uploadBtn" style="border-color:rgba(68, 136, 255, 0.2);color:#4488ff;">🎬 UPLOAD</button>
+  </div>
+
+  <!-- ============================================================
+       HIDDEN FILE INPUT
+       ============================================================ -->
+  <input type="file" id="fileInput" accept="video/*,image/*" style="display:none;">
+
+  <!-- ============================================================
+       MASTER JAVASCRIPT ENGINE
+       ============================================================ -->
+  <script>
+    (function() {
+      "use strict";
+
+      // ====================================================================
+      // 1. ELEMENTS
+      // ====================================================================
+      const video = document.getElementById('bgVideo');
+      const playBtn = document.getElementById('playBtn');
+      const glitchToggleBtn = document.getElementById('glitchToggleBtn');
+      const hiveToggleBtn = document.getElementById('hiveToggleBtn');
+      const resetBtn = document.getElementById('resetBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      const uploadBtn = document.getElementById('uploadBtn');
+      const fileInput = document.getElementById('fileInput');
+
+      const clockDisplay = document.getElementById('clock-display');
+      const deltaDisplay = document.getElementById('delta-display');
+      const xDisplay = document.getElementById('x-display');
+      const yDisplay = document.getElementById('y-display');
+      const hzDisplay = document.getElementById('hz-display');
+      const speedDisplay = document.getElementById('speed-display');
+      const cutoffDisplay = document.getElementById('cutoff-display');
+      const ghostX = document.getElementById('ghost-x');
+      const ghostY = document.getElementById('ghost-y');
+      const ghostHz = document.getElementById('ghost-hz');
+      const ghostStatus = document.getElementById('ghost-status');
+      const bridgeStatus = document.getElementById('bridge-status');
+      const brainStatus = document.getElementById('brain-status');
+      const navStatus = document.getElementById('nav-status');
+      const engineModeDisplay = document.getElementById('engine-mode-display');
+      const assetDisplay = document.getElementById('asset-id-display');
+
+      // ====================================================================
+      // 2. VIDEO PLAYLIST
+      // ====================================================================
+      let videoPlaylist = [
+        'animate-it (1).mp4',
+        '1781986524680.mp4'
+      ];
+      let currentVideoIndex = 0;
+
+      // ====================================================================
+      // 3. STATE
+      // ====================================================================
+      let isPlaying = true;
+      let glitchActive = true;
+      let hiveConnected = false;
+      let ws = null;
+      let clockOffset = 0;
+      let deltaAccum = 0;
+      let lastTimestamp = performance.now();
+      let glitchAmount = 0;
+      let targetGlitch = 0;
+
+      // BCI data
+      let bciData = {
+        x: 50, y: 50, tremor: 0, pitch: 1.0, cutoff: 300,
+        ghostX: 50, ghostY: 50, ghostHz: 0
+      };
+
+      // ====================================================================
+      // 4. QUANTUM CLOCK
+      // ====================================================================
+      function updateQuantumClock() {
+        const now = performance.now();
+        const delta = (now - lastTimestamp) / 1000;
+        lastTimestamp = now;
+        deltaAccum += delta;
+        const displacement = Math.sin(deltaAccum * 0.3) * 0.15 + Math.cos(deltaAccum * 0.7) * 0.08;
+        clockOffset += delta * (0.5 + displacement * 0.3);
+
+        const realTime = new Date();
+        const distortedMs = realTime.getTime() + clockOffset * 1000;
+        const distortedTime = new Date(distortedMs);
+
+        let h = String(distortedTime.getHours()).padStart(2, '0');
+        let m = String(distortedTime.getMinutes()).padStart(2, '0');
+        let s = String(distortedTime.getSeconds()).padStart(2, '0');
+
+        if (Math.random() < glitchAmount * 0.2) {
+          const chars = `${h}:${m}:${s}`.split('');
+          for (let i = 0; i < chars.length; i++) {
+            if (chars[i] !== ':' && Math.random() < 0.15) {
+              chars[i] = String.fromCharCode(48 + Math.floor(Math.random() * 10));
+            }
+          }
+          clockDisplay.textContent = chars.join('');
+        } else {
+          clockDisplay.textContent = `${h}:${m}:${s}`;
+        }
+
+        const deltaMs = (clockOffset * 1000) % 1000;
+        deltaDisplay.textContent = deltaMs.toFixed(2);
+
+        requestAnimationFrame(updateQuantumClock);
+      }
+
+      // ====================================================================
+      // 5. GLITCH ENGINE
+      // ====================================================================
+      function updateGlitch() {
+        glitchAmount += (targetGlitch - glitchAmount) * 0.03;
+
+        const primary = document.getElementById('hud-primary');
+        const secondary = document.getElementById('hud-secondary');
+
+        if (glitchActive && glitchAmount > 0.05) {
+          const shiftX = (Math.random() - 0.5) * glitchAmount * 8;
+          const shiftY = (Math.random() - 0.5) * glitchAmount * 6;
+          primary.style.transform = `translate(${shiftX}px, ${shiftY}px)`;
+          primary.style.textShadow = `0 0 ${glitchAmount * 20}px rgba(255, 0, 170, 0.1)`;
+
+          const shiftX2 = (Math.random() - 0.5) * glitchAmount * -6;
+          const shiftY2 = (Math.random() - 0.5) * glitchAmount * -8;
+          secondary.style.transform = `translate(${shiftX2 + 4}px, ${shiftY2 - 4}px)`;
+          secondary.style.textShadow = `0 0 ${glitchAmount * 15}px rgba(255, 68, 136, 0.05)`;
+
+          if (Math.random() < glitchAmount * 0.3) {
+            ghostStatus.textContent = 'GLITCH_OVERRIDE';
+            ghostStatus.style.color = '#ff00aa';
+          } else {
+            ghostStatus.textContent = 'STANDBY (TOUCH & DRAG)';
+            ghostStatus.style.color = '#ff66aa';
+          }
+        } else {
+          primary.style.transform = '';
+          primary.style.textShadow = '0 0 10px rgba(0, 255, 204, 0.05)';
+          secondary.style.transform = 'translate(4px, -4px)';
+          secondary.style.textShadow = '0 0 8px rgba(255, 68, 136, 0.03)';
+        }
+
+        requestAnimationFrame(updateGlitch);
+      }
+
+      // ====================================================================
+      // 6. QUANTUM SNOW
+      // ====================================================================
+      const snowCanvas = document.getElementById('quantum-snow-master');
+      const sctx = snowCanvas.getContext('2d');
+      let snowParticles = [];
+      const SNOW_COUNT = 120;
+
+      function resizeSnow() {
+        snowCanvas.width = window.innerWidth;
+        snowCanvas.height = window.innerHeight;
+      }
+      window.addEventListener('resize', resizeSnow);
+      resizeSnow();
+
+      class SnowParticle {
+        constructor() { this.reset(); }
+        reset() {
+          this.x = Math.random() * snowCanvas.width;
+          this.y = Math.random() * snowCanvas.height - snowCanvas.height;
+          this.size = 0.5 + Math.random() * 2.5;
+          this.speed = 0.2 + Math.random() * 1;
+          this.opacity = 0.1 + Math.random() * 0.4;
+          this.wobble = Math.random() * 100;
+        }
+        update() {
+          this.y += this.speed;
+          this.wobble += 0.02;
+          this.x += Math.sin(this.wobble) * 0.15;
+          if (this.y > snowCanvas.height) this.reset();
+        }
+        draw(ctx) {
+          const alpha = this.opacity * (0.5 + 0.5 * Math.sin(this.wobble * 0.5));
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(102, 252, 241, ${alpha * 0.3})`;
+          ctx.shadowColor = 'rgba(102, 252, 241, 0.02)';
+          ctx.shadowBlur = 10;
+          ctx.fill();
+        }
+      }
+
+      for (let i = 0; i < SNOW_COUNT; i++) {
+        const p = new SnowParticle();
+        p.y = Math.random() * snowCanvas.height;
+        snowParticles.push(p);
+      }
+
+      function drawSnow() {
+        sctx.clearRect(0, 0, snowCanvas.width, snowCanvas.height);
+        snowParticles.forEach(p => { p.update(); p.draw(sctx); });
+        requestAnimationFrame(drawSnow);
+      }
+      drawSnow();
+
+      // ====================================================================
+      // 7. WEB SOCKET HIVE
+      // ====================================================================
+      const HOST = '192.168.4.54';
+      const PORT = 8081;
+
+      function connectHive() {
+        if (ws && ws.readyState === WebSocket.OPEN) return;
+        try {
+          ws = new WebSocket(`ws://${HOST}:${PORT}`);
+          ws.onopen = () => {
+            hiveConnected = true;
+            bridgeStatus.textContent = '◉ BRIDGE: ONLINE';
+            bridgeStatus.style.color = '#44ff88';
+            hiveToggleBtn.textContent = '🐝 HIVE: ON';
+            hiveToggleBtn.style.borderColor = 'rgba(68, 255, 136, 0.3)';
+            hiveToggleBtn.style.color = '#44ff88';
+            brainStatus.textContent = 'NEURAL LINK: ACTIVE';
+            brainStatus.style.color = '#44ff88';
+            navStatus.textContent = 'SYNC';
+          };
+          ws.onmessage = (event) => {
+            try {
+              const data = JSON.parse(event.data);
+              bciData.x = data.x || 50;
+              bciData.y = data.y || 50;
+              bciData.tremor = data.tremor || 0;
+              bciData.pitch = data.pitch || 1.0;
+              bciData.cutoff = data.cutoff || 300;
+              bciData.ghostX = data.x || 50;
+              bciData.ghostY = data.y || 50;
+              bciData.ghostHz = data.tremor || 0;
+
+              xDisplay.textContent = bciData.x.toFixed(2);
+              yDisplay.textContent = bciData.y.toFixed(2);
+              hzDisplay.textContent = bciData.tremor.toFixed(2);
+              speedDisplay.textContent = bciData.pitch.toFixed(2);
+              cutoffDisplay.textContent = Math.round(bciData.cutoff);
+              ghostX.textContent = bciData.ghostX.toFixed(2);
+              ghostY.textContent = bciData.ghostY.toFixed(2);
+              ghostHz.textContent = bciData.ghostHz.toFixed(2);
+
+              video.playbackRate = bciData.pitch;
+              const shake = bciData.tremor * 0.3;
+              document.body.style.transform = `translate(${shake}px, ${shake/2}px)`;
+              const hue = (bciData.cutoff / 5000) * 360;
+              video.style.filter = `hue-rotate(${hue}deg) brightness(${1 + (bciData.tremor/30)})`;
+            } catch (e) { targetGlitch = Math.min(1, targetGlitch + 0.03); }
+          };
+          ws.onclose = () => {
+            hiveConnected = false;
+            bridgeStatus.textContent = '◉ BRIDGE: OFFLINE';
+            bridgeStatus.style.color = '#ff4444';
+            hiveToggleBtn.textContent = '🐝 HIVE: OFF';
+            hiveToggleBtn.style.borderColor = 'rgba(255, 77, 109, 0.2)';
+            hiveToggleBtn.style.color = '#ff4d6d';
+            brainStatus.textContent = 'NEURAL LINK: STANDBY';
+            brainStatus.style.color = '#667799';
+            navStatus.textContent = 'OFFLINE';
+            setTimeout(connectHive, 3000);
+          };
+          ws.onerror = () => { if (ws) ws.close(); };
+        } catch (e) { console.log('Hive error:', e); }
+      }
+
+      function toggleHive() {
+        if (hiveConnected) { if (ws) ws.close(); hiveConnected = false; }
+        else connectHive();
+      }
+
+      // ====================================================================
+      // 8. VIDEO PLAYLIST CONTROLS
+      // ====================================================================
+      function loadVideo(index) {
+        if (index >= videoPlaylist.length) index = 0;
+        if (index < 0) index = videoPlaylist.length - 1;
+        currentVideoIndex = index;
+        const source = video.querySelector('source');
+        source.src = videoPlaylist[currentVideoIndex];
+        video.load();
+        if (isPlaying) video.play().catch(() => {});
+        assetDisplay.textContent = `FEED_ID // ${videoPlaylist[currentVideoIndex]}`;
+        engineModeDisplay.textContent = 'CORE_MODE // VIDEO STREAM MATRIX';
+      }
+
+      function nextVideo() {
+        loadVideo(currentVideoIndex + 1);
+      }
+
+      // ====================================================================
+      // 9. FILE UPLOAD
+      // ====================================================================
+      uploadBtn.addEventListener('click', () => {
+        fileInput.click();
+      });
+
+      fileInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        const url = URL.createObjectURL(file);
+        const isVideo = file.type.startsWith('video/');
+        if (isVideo) {
+          videoPlaylist.push(url);
+          loadVideo(videoPlaylist.length - 1);
+          console.log('🎬 Video loaded:', file.name);
+        } else {
+          // Image - set as background
+          video.style.backgroundImage = `url('${url}')`;
+          video.style.backgroundSize = 'cover';
+          video.style.backgroundPosition = 'center';
+          video.style.opacity = '0.5';
+          console.log('🖼️ Image loaded:', file.name);
+        }
+        fileInput.value = '';
+        navStatus.textContent = 'LOADED';
+        setTimeout(() => { navStatus.textContent = 'SYNC'; }, 2000);
+      });
+
+      // ====================================================================
+      // 10. CONTROLS
+      // ====================================================================
+      playBtn.addEventListener('click', () => {
+        if (isPlaying) {
+          video.pause();
+          playBtn.textContent = '▶ PLAY';
+          playBtn.className = 'danger';
+        } else {
+          video.play().catch(() => {});
+          playBtn.textContent = '⏸ PAUSE';
+          playBtn.className = 'success';
+        }
+        isPlaying = !isPlaying;
+      });
+
+      glitchToggleBtn.addEventListener('click', () => {
+        glitchActive = !glitchActive;
+        if (glitchActive) {
+          glitchToggleBtn.textContent = '🌀 GLITCH: ON';
+          glitchToggleBtn.className = 'danger';
+          targetGlitch = 0.2 + Math.random() * 0.3;
+        } else {
+          glitchToggleBtn.textContent = '🌀 GLITCH: OFF';
+          glitchToggleBtn.className = '';
+          targetGlitch = 0;
+        }
+      });
+
+      hiveToggleBtn.addEventListener('click', toggleHive);
+
+      resetBtn.addEventListener('click', () => {
+        video.playbackRate = 1.0;
+        video.style.filter = '';
+        document.body.style.transform = '';
+        video.currentTime = 0;
+        if (isPlaying) video.play().catch(() => {});
+        document.getElementById('hud-primary').style.transform = '';
+        document.getElementById('hud-secondary').style.transform = 'translate(4px, -4px)';
+        targetGlitch = 0;
+        glitchAmount = 0;
+        clockOffset = 0;
+        bciData = { x: 50, y: 50, tremor: 0, pitch: 1.0, cutoff: 300, ghostX: 50, ghostY: 50, ghostHz: 0 };
+        xDisplay.textContent = '50.00';
+        yDisplay.textContent = '50.00';
+        hzDisplay.textContent = '0.00';
+        speedDisplay.textContent = '1.00';
+        cutoffDisplay.textContent = '0';
+        ghostX.textContent = '50.00';
+        ghostY.textContent = '50.00';
+        ghostHz.textContent = '0.00';
+      });
+
+      nextBtn.addEventListener('click', nextVideo);
+
+      // ====================================================================
+      // 11. KEYBOARD SHORTCUTS
+      // ====================================================================
+      document.addEventListener('keydown', function(e) {
+        if (e.key === ' ' || e.key === 'Space') {
+          e.preventDefault();
+          playBtn.click();
+        }
+        if (e.key === 'g' || e.key === 'G') {
+          glitchToggleBtn.click();
+        }
+        if (e.key === 'h' || e.key === 'H') {
+          hiveToggleBtn.click();
+        }
+        if (e.key === 'r' || e.key === 'R') {
+          resetBtn.click();
+        }
+        if (e.key === 'n' || e.key === 'N') {
+          nextBtn.click();
+        }
+        if (e.key === 'u' || e.key === 'U') {
+          e.preventDefault();
+          uploadBtn.click();
+        }
+      });
+
+      // ====================================================================
+      // 12. AUTO-CONNECT HIVE ON BOOT
+      // ====================================================================
+      setTimeout(connectHive, 1000);
+
+      // ====================================================================
+      // 13. INIT
+      // ====================================================================
+      updateQuantumClock();
+      updateGlitch();
+      
+      console.log('🧠 NEURAL CORE · CYBERPUNK GIRLS · BCI MATRIX');
+      console.log('📌 Shortcuts: Space=Play/Pause, G=Glitch, H=Hive, R=Reset, N=Next, U=Upload');
+      console.log('🌐 Hive IP:', HOST + ':' + PORT);
+
+    })();
+  </script>
+</body>
+</html>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NEURAL CORE · CYBERPUNK GIRLS · BCI MATRIX</title>
   
